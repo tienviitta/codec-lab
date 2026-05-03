@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: week01_visuals",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/experiments/week01_visuals.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true,
+      "args": []
+    },
+    {
+      "name": "Python: week01_visuals (fast preview)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/experiments/week01_visuals.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true,
+      "args": ["--n-bits", "40000", "--bsc-trials", "30", "--bsc-width", "80"]
+    }
+  ]
+}

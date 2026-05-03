@@ -24,4 +24,6 @@ outputs/
 Thumbs.db
 *.swp
 .idea/
-.vscode/
+# Track shared launch configs; keep local editor settings private
+.vscode/*
+!.vscode/launch.json

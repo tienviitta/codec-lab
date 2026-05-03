@@ -21,12 +21,45 @@ Primary references: **Todd K. Moon** (*Error Correction Coding*, lab-oriented sp
 
 Requires **Python ≥3.12**.
 
+Implementation stack for this repo: **NumPy** (arrays, RNG), **SciPy** (e.g. `erfc` for analytic BER), **Matplotlib** (figures and animations).
+
 ```bash
 uv sync --all-extras    # core + dev (pytest, ruff) + Jupyter
 uv run pytest
 uv run ruff check src tests
 uv run jupyter lab      # optional: explore notebooks once added
 ```
+
+### Run tests (step by step)
+
+1. From the repo root, create/update the environment: `uv sync --extra dev` (or `uv sync --all-extras` if you also want Jupyter).
+2. Run the full suite: `uv run pytest` (quiet by default; use `uv run pytest -v` for per-test names).
+3. Run a subset, e.g. only channels: `uv run pytest tests/test_channels_awgn.py tests/test_channels_bsc.py`.
+4. Optional static checks: `uv run ruff check src tests`.
+
+Tests live under `tests/` and mirror packages under `src/codec_lab/` (e.g. `channels/` → `test_channels_*.py`, `utils/ber.py` → `test_ber.py`).
+
+### Run Week 1 visuals (uncoded BPSK + BSC heatmap)
+
+1. Ensure deps are installed: `uv sync` (Matplotlib is already a core dependency).
+2. Generate PNGs into `outputs/figures/`:
+
+   ```bash
+   uv run python experiments/week01_visuals.py
+   ```
+
+   **VS Code / Cursor:** open **Run and Debug**, choose **“Python: week01_visuals”** (or **“… (fast preview)”** for smaller `--n-bits` / heatmap). Ensure the workspace interpreter is `.venv` (e.g. **Python: Select Interpreter** → `./.venv/Scripts/python.exe` on Windows) and the **Python** / **debugpy** extension is enabled.
+
+3. Optional CLI knobs: `--n-bits 500000` (more stable Monte Carlo BER), `--seed 1`, `--bsc-p 0.1`, `--bsc-trials 100`, `--bsc-width 300`.
+
+You should see `week01_uncoded_bpsk_ber.png` and `week01_bsc_flip_heatmap.png` under `outputs/figures/`.
+
+### Adding new implementations and visuals
+
+1. **Library code** under `src/codec_lab/<area>/` (small modules, clear docstrings). Re-export public APIs from `codec_lab.<area>.__init__` when it helps imports.
+2. **Tests** in `tests/test_<area>_<topic>.py`: use `numpy.random.Generator` with fixed seeds for reproducibility; compare to **SciPy** closed forms or golden vectors when possible.
+3. **Figures or sweeps** as scripts under `experiments/` (e.g. `experiments/week02_….py`): only **NumPy / SciPy / Matplotlib** and imports from `codec_lab`; write artifacts to `outputs/` so git stays clean.
+4. **Notebooks** (optional): thin wrappers that call the same functions as tests/scripts for interactive exploration.
 
 Generated figures and videos should go under **`outputs/`** (gitignored). Curate finals for posts or a separate site into **`publish/`** when you introduce that layout.
 
@@ -46,7 +79,9 @@ codec-lab/
 │   └── codec_lab/        # importable package (channels, utils, polar, …)
 ├── tests/                # pytest
 ├── notebooks/            # Jupyter (to be added)
-├── experiments/          # CLI sweeps (optional)
+├── experiments/          # e.g. week01_visuals.py → outputs/figures/
+├── .vscode/
+│   └── launch.json       # shared debug configs (local settings.json ignored)
 ├── animations/           # matplotlib / export scripts (optional)
 ├── outputs/              # generated; not committed
 ├── publish/              # optional curated assets + post drafts
