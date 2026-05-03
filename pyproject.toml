@@ -1,0 +1,39 @@
+[project]
+name = "codec-lab"
+version = "0.1.0"
+description = "Hands-on FEC/ECC experiments and visuals (PHY-oriented: LDPC, polar, channels)."
+authors = [
+    { name = "Petri Vaisanen", email = "petri.vaisanen@nokia.com" }
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.0",
+    "scipy>=1.11",
+    "matplotlib>=3.8",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.8",
+]
+notebooks = [
+    "jupyterlab>=4.0",
+    "ipykernel>=6.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.11.2,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
